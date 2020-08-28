@@ -27,7 +27,7 @@ app.use(express.static("public"));
 let allowedOrigins = [
   "http://localhost:27017",
   "http://testsite.com",
-  "https://git.heroku.com/ancient-ocean-03960.git",
+  "https://git.heroku.com/peaceful-waters-12563.git",
 ];
 
 app.use(
