@@ -4,14 +4,16 @@ const express = require("express"),
   Models = require("./models.js"),
   uuid = require("uuid"),
   morgan = require("morgan"),
-  passport = require("passport");
+  passport = require("passport"),
+  cors = require("cors"),
+  { check, validationResult } = require("express-validator");
 
 require("./passport");
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect("mongodb://localhost:28017/myFlixDB", {
+mongoose.connect("mongodb://localhost:8080/myFlixDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -21,6 +23,24 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan("common"));
 app.use(express.static("public"));
+
+let allowedOrigins = ["http://localhost:8080", "http://testsite.com"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // If a specific origin isn’t found on the list of allowed origins
+        let message =
+          "The CORS policy for this application doesn’t allow access from origin " +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 
 let auth = require("./auth")(app);
 
@@ -116,16 +136,45 @@ app.get(
 //Allows new users to register
 app.post(
   "/users",
+  [
+    check(
+      "Username",
+      "Username needs to be at least 6 characters long"
+    ).isLength({
+      min: 6,
+    }),
+    check(
+      "Username",
+      "Username contains non alphanumeric charecters - not allowed!"
+    ).isAlphanumeric(),
+    // check("Username", "Username requires 1 Uppercase character!").contains([
+    //   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+    // ]),
+    // check('Password', 'Password field must be filled!').not().isEmpty(),
+    check("Password", "Password must be at least 6 characters long!").isLength({
+      min: 6,
+    }),
+    check("Email", "Email does not appear to be valid!").isEmail(),
+  ],
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Users.findOne({ Username: req.body.Username })
+    // check the validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
       .then((user) => {
         if (user) {
+          //If the user is found, send a response that it already exists
           return res.status(400).send(req.body.Username + "already exists");
         } else {
           Users.create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday,
           })
@@ -283,7 +332,10 @@ app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send("There has been an error.");
 });
-app.listen(28017, () => console.log("Your app is listening on port 28017."));
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", () => {
+  console.log("Listening on port " + port);
+});
 
 // var movie3 = {
 //   Title: "Ricki and the Flash",
