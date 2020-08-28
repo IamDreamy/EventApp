@@ -13,7 +13,7 @@ require("./passport");
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect("mongodb://localhost:8080/myFlixDB", {
+mongoose.connect("mongodb://localhost:27017/myFlixDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -24,7 +24,11 @@ app.use(bodyParser.json());
 app.use(morgan("common"));
 app.use(express.static("public"));
 
-let allowedOrigins = ["http://localhost:8080", "http://testsite.com"];
+let allowedOrigins = [
+  "http://localhost:27017",
+  "http://testsite.com",
+  "https://git.heroku.com/ancient-ocean-03960.git",
+];
 
 app.use(
   cors({
