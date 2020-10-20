@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/EventApp/static/css/main.5f361e03.chunk.css",
+    "main.js": "/EventApp/static/js/main.aa6ad75e.chunk.js",
+    "main.js.map": "/EventApp/static/js/main.aa6ad75e.chunk.js.map",
+    "runtime-main.js": "/EventApp/static/js/runtime-main.86016f32.js",
+    "runtime-main.js.map": "/EventApp/static/js/runtime-main.86016f32.js.map",
+    "static/js/2.5e98694f.chunk.js": "/EventApp/static/js/2.5e98694f.chunk.js",
+    "static/js/2.5e98694f.chunk.js.map": "/EventApp/static/js/2.5e98694f.chunk.js.map",
+    "index.html": "/EventApp/index.html",
+    "precache-manifest.5ea07744f758215ce69285912c1dc744.js": "/EventApp/precache-manifest.5ea07744f758215ce69285912c1dc744.js",
+    "service-worker.js": "/EventApp/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/EventApp/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.5e98694f.chunk.js.LICENSE.txt": "/EventApp/static/js/2.5e98694f.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/EventApp/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.86016f32.js",
+    "static/js/2.5e98694f.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.aa6ad75e.chunk.js"
+  ]
+}
